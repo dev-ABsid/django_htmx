@@ -1,0 +1,895 @@
+{% extends 'base/base.html' %} {% block content %}
+<div class="p-1 max-w-6xl mx-auto">
+  <!-- Header Section -->
+  <div class="bg-white rounded-lg shadow dark:bg-dark-200 mb-6">
+    <div class="p-6 pb-6 border-b">
+      <div class="flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="p-2 bg-blue-100 rounded-xl">
+            <svg class="w-6 h-6 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+            </svg>
+          </div>
+          <div>
+            <span class="text-xl font-semibold">Create Bookings</span>
+            <p class="text-sm text-gray-500 dark:text-gray-400 font-normal mt-1">
+              Create your shipping bookings
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+    <form
+    id="booking-form"
+    hx-post="{% url 'main:create_booking' %}"
+    hx-target="#form-response"
+    hx-trigger="submit"
+    class="space-y-6"
+  >
+    {% csrf_token %}
+
+    <!-- Address Information -->
+    <div class="grid md:grid-cols-2 gap-6">
+      <!-- Origin Address -->
+      <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+          Origin Address
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Company Name</label
+            >
+            <input
+              type="text"
+              name="[origin_address][company_name]"
+              value="Test Plc."
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Contact Name</label
+            >
+            <input
+              type="text"
+              name="[origin_address][contact_name]"
+              value="Foo Bar"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Email</label
+            >
+            <input
+              type="email"
+              name="[origin_address][contact_email]"
+              value="asd@asd.com"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Phone</label
+            >
+            <input
+              type="tel"
+              name="[origin_address][contact_phone]"
+              value="+852-3008-5678"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Address Line 1</label
+            >
+            <input
+              type="text"
+              name="[origin_address][line_1]"
+              value="Kennedy Town"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Address Line 2</label
+            >
+            <input
+              type="text"
+              name="[origin_address][line_2]"
+              value="Block 3"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >City</label
+              >
+              <input
+                type="text"
+                name="[origin_address][city]"
+                value="Hong Kong"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >State</label
+              >
+              <input
+                type="text"
+                name="[origin_address][state]"
+                value="Yuen Long"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >Postal Code</label
+              >
+              <input
+                type="text"
+                name="[origin_address][postal_code]"
+                value="0000"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >Country</label
+              >
+              <select
+                name="[origin_address][country_alpha2]"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              >
+                <option value="HK" selected>Hong Kong</option>
+                <option value="US">United States</option>
+                <option value="GB">United Kingdom</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Destination Address -->
+      <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+        <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+          Destination Address
+        </h2>
+        <div class="space-y-4">
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Company Name</label
+            >
+            <input
+              type="text"
+              name="[destination_address][company_name]"
+              value="Test Plc."
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Contact Name</label
+            >
+            <input
+              type="text"
+              name="[destination_address][contact_name]"
+              value="Foo Bar"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Email</label
+            >
+            <input
+              type="email"
+              name="[destination_address][contact_email]"
+              value="asd@asd.com"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Phone</label
+            >
+            <input
+              type="tel"
+              name="[destination_address][contact_phone]"
+              value="+852-3008-5678"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Address Line 1</label
+            >
+            <input
+              type="text"
+              name="[destination_address][line_1]"
+              value="Kennedy Town"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Address Line 2</label
+            >
+            <input
+              type="text"
+              name="[destination_address][line_2]"
+              value="Block 3"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            />
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >City</label
+              >
+              <input
+                type="text"
+                name="[destination_address][city]"
+                value="Hong Kong"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >State</label
+              >
+              <input
+                type="text"
+                name="[destination_address][state]"
+                value="Yuen Long"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >Postal Code</label
+              >
+              <input
+                type="text"
+                name="[destination_address][postal_code]"
+                value="0000"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >Country</label
+              >
+              <select
+                name="[destination_address][country_alpha2]"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              >
+                <option value="HK" selected>Hong Kong</option>
+                <option value="US">United States</option>
+                <option value="GB">United Kingdom</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Regulatory Information -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+        Regulatory Information
+      </h2>
+      <div class="grid md:grid-cols-2 gap-6">
+        <div>
+          <h3 class="text-md font-medium mb-3 text-gray-900 dark:text-white">
+            Shipper Identifiers
+          </h3>
+          <div class="space-y-4">
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >EORI Number</label
+              >
+              <input
+                type="text"
+                name="[regulatory_identifiers][eori]"
+                value="DE 123456789 12345"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >IOSS Number</label
+              >
+              <input
+                type="text"
+                name="[regulatory_identifiers][ioss]"
+                value="IM1234567890"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >VAT Number</label
+              >
+              <input
+                type="text"
+                name="[regulatory_identifiers][vat_number]"
+                value="EU1234567890"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+          </div>
+        </div>
+        <div>
+          <h3 class="text-md font-medium mb-3 text-gray-900 dark:text-white">
+            Buyer Identifiers
+          </h3>
+          <div class="space-y-4">
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >EIN</label
+              >
+              <input
+                type="text"
+                name="[buyer_regulatory_identifiers][ein]"
+                value="12-3456789"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >VAT Number</label
+              >
+              <input
+                type="text"
+                name="[buyer_regulatory_identifiers][vat_number]"
+                value="EU1234567890"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >SSN</label
+              >
+              <input
+                type="text"
+                name="[buyer_regulatory_identifiers][ssn]"
+                value="123-45-6789"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Parcel Information -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+        Parcel Information
+      </h2>
+      <div class="space-y-4">
+        <div id="parcels">
+          <div class="parcel border dark:border-gray-600 rounded p-4 mb-4">
+            <input type="hidden" name="[parcels][0][box]" value="{}" />
+            <div class="grid grid-cols-3 gap-4">
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >Weight (kg)</label
+                >
+                <input
+                  type="number"
+                  step="0.01"
+                  name="[parcels][0][total_actual_weight]"
+                  value="1"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >Description</label
+                >
+                <input
+                  type="text"
+                  name="[parcels][0][items][0][description]"
+                  value="item"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >HS Code</label
+                >
+                <input
+                  type="text"
+                  name="[parcels][0][items][0][hs_code]"
+                  value="123456"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4 mt-4">
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >Category</label
+                >
+                <input
+                  type="text"
+                  name="[parcels][0][items][0][category]"
+                  value=""
+                  placeholder="Enter category"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >SKU</label
+                >
+                <input
+                  type="text"
+                  name="[parcels][0][items][0][sku]"
+                  value=""
+                  placeholder="Enter SKU"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mt-4">
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >Length (cm)</label
+                >
+                <input
+                  type="number"
+                  step="0.1"
+                  name="[parcels][0][items][0][dimensions][length]"
+                  value="1"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >Width (cm)</label
+                >
+                <input
+                  type="number"
+                  step="0.1"
+                  name="[parcels][0][items][0][dimensions][width]"
+                  value="2"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >Height (cm)</label
+                >
+                <input
+                  type="number"
+                  step="0.1"
+                  name="[parcels][0][items][0][dimensions][height]"
+                  value="3"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mt-4">
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >Actual Weight (kg)</label
+                >
+                <input
+                  type="number"
+                  step="0.01"
+                  name="[parcels][0][items][0][actual_weight]"
+                  value="10"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >Declared Value</label
+                >
+                <input
+                  type="number"
+                  step="0.01"
+                  name="[parcels][0][items][0][declared_customs_value]"
+                  value="20"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >Currency</label
+                >
+                <select
+                  name="[parcels][0][items][0][declared_currency]"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                >
+                  <option value="USD" selected>USD</option>
+                  <option value="EUR">EUR</option>
+                  <option value="GBP">GBP</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mt-4">
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >Quantity</label
+                >
+                <input
+                  type="number"
+                  name="[parcels][0][items][0][quantity]"
+                  value="2"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                />
+              </div>
+              <div>
+                <label
+                  class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                  >Origin Country</label
+                >
+                <select
+                  name="[parcels][0][items][0][origin_country_alpha2]"
+                  class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+                >
+                  <option value="HK" selected>Hong Kong</option>
+                  <option value="US">United States</option>
+                  <option value="GB">United Kingdom</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-3 gap-4 mt-4">
+              <div>
+                <label class="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    name="[parcels][0][items][0][contains_battery_pi966]"
+                    checked
+                    class="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500"
+                  />
+                  <span class="ml-2 text-gray-700 dark:text-gray-200"
+                    >Contains Battery (PI966)</span
+                  >
+                </label>
+              </div>
+              <div>
+                <label class="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    name="[parcels][0][items][0][contains_battery_pi967]"
+                    checked
+                    class="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500"
+                  />
+                  <span class="ml-2 text-gray-700 dark:text-gray-200"
+                    >Contains Battery (PI967)</span
+                  >
+                </label>
+              </div>
+              <div>
+                <label class="inline-flex items-center">
+                  <input
+                    type="checkbox"
+                    name="[parcels][0][items][0][contains_liquids]"
+                    checked
+                    class="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500"
+                  />
+                  <span class="ml-2 text-gray-700 dark:text-gray-200"
+                    >Contains Liquids</span
+                  >
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Order Data -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+        Order Information
+      </h2>
+      <div class="space-y-4">
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+            >Platform Name</label
+          >
+          <input
+            type="text"
+            name="[order_data][platform_name]"
+            value="test platform"
+            class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+            >Selected Courier</label
+          >
+          <input
+            type="text"
+            name="[order_data][buyer_selected_courier_name]"
+            value="test_courier"
+            class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+            >Order Created At</label
+          >
+          <input
+            type="datetime-local"
+            name="[order_data][order_created_at]"
+            value="{% now 'Y-m-d\TH:i' %}"
+            class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+      </div>
+    </div>
+
+    <!-- Insurance and Additional Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+        Additional Settings
+      </h2>
+      <div class="space-y-4">
+        <div>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              name="[insurance][is_insured]"
+              class="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500"
+            />
+            <span class="ml-2 text-gray-700 dark:text-gray-200"
+              >Add Insurance</span
+            >
+          </label>
+        </div>
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+            >Incoterms</label
+          >
+          <select
+            name="[incoterms]"
+            class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          >
+            <option value="DDU" selected>DDU</option>
+            <option value="DDP">DDP</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <!-- Courier Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+        Courier Settings
+      </h2>
+      <div class="space-y-4">
+        <div>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              name="[courier_settings][allow_fallback]"
+              class="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500"
+            />
+            <span class="ml-2 text-gray-700 dark:text-gray-200"
+              >Allow Fallback</span
+            >
+          </label>
+        </div>
+        <div>
+          <label class="inline-flex items-center">
+            <input
+              type="checkbox"
+              name="[courier_settings][apply_shipping_rules]"
+              checked
+              class="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500"
+            />
+            <span class="ml-2 text-gray-700 dark:text-gray-200"
+              >Apply Shipping Rules</span
+            >
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <!-- Shipping Settings -->
+    <div class="bg-white dark:bg-gray-800 shadow rounded-lg p-6">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">
+        Shipping Settings
+      </h2>
+      <div class="space-y-4">
+        <div>
+          <label
+            class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+            >QR Code (Additional Services)</label
+          >
+          <input
+            type="text"
+            name="[shipping_settings][additional_services][qr_code]"
+            value="none"
+            class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+          />
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Weight Unit</label
+            >
+            <select
+              name="[shipping_settings][units][weight]"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            >
+              <option value="kg" selected>kg</option>
+              <option value="lb">lb</option>
+            </select>
+          </div>
+          <div>
+            <label
+              class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+              >Dimensions Unit</label
+            >
+            <select
+              name="[shipping_settings][units][dimensions]"
+              class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+            >
+              <option value="cm" selected>cm</option>
+              <option value="in">in</option>
+            </select>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              name="[shipping_settings][buy_label]"
+              class="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500"
+            />
+            <span class="ml-2 text-gray-700 dark:text-gray-200"
+              >Buy Label</span
+            >
+          </div>
+          <div class="flex items-center">
+            <input
+              type="checkbox"
+              name="[shipping_settings][buy_label_synchronous]"
+              class="rounded border-gray-300 dark:border-gray-600 text-blue-600 dark:text-blue-500"
+            />
+            <span class="ml-2 text-gray-700 dark:text-gray-200"
+              >Buy Label Synchronous</span
+            >
+          </div>
+        </div>
+        <div>
+          <h3 class="text-md font-medium mb-2 text-gray-900 dark:text-white">
+            Printing Options
+          </h3>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >Format</label
+              >
+              <input
+                type="text"
+                name="[shipping_settings][printing_options][format]"
+                value="png"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >Label Size</label
+              >
+              <input
+                type="text"
+                name="[shipping_settings][printing_options][label]"
+                value="4x6"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >Commercial Invoice</label
+              >
+              <input
+                type="text"
+                name="[shipping_settings][printing_options][commercial_invoice]"
+                value="A4"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+            <div>
+              <label
+                class="block text-sm font-medium text-gray-700 dark:text-gray-200"
+                >Packing Slip</label
+              >
+              <input
+                type="text"
+                name="[shipping_settings][printing_options][packing_slip]"
+                value="4x6"
+                class="p-2 mt-1 block w-full rounded-md border-gray-300 dark:border-gray-600 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:bg-gray-700 dark:text-white"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="flex justify-end">
+      <button
+        type="submit"
+        class="bg-blue-500 hover:bg-blue-700 dark:bg-blue-600 dark:hover:bg-blue-800 text-white font-bold py-2 px-4 rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800"
+      >
+        Create Booking
+      </button>
+    </div>
+  </form>
+
+<!-- Response Area -->
+<div id="form-response" class="mt-6"></div>
+</div>
+{% endblock %}
+
+</div>

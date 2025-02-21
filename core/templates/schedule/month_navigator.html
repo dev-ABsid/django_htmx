@@ -1,0 +1,193 @@
+<div class="flex items-center gap-3 bg-primary/10 dark:bg-gray-800 p-2 rounded-xl" x-data="monthNavigator('{{ current_date|date:'Y-m' }}')" id="calendar-nav">
+  <div class="relative">
+    <button 
+      @click="isOpen = !isOpen"
+      class="flex items-center gap-2 px-3 py-1.5 rounded hover:bg-primary/10 dark:hover:bg-gray-700 dark:text-gray-200"
+      type="button"
+    >
+      <span class="font-semibold min-w-32 text-center" x-text="formatDate(currentDate)"></span>
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
+
+    <div 
+      x-show="isOpen" 
+      @click.away="isOpen = false"
+      class="absolute top-full mt-1 w-64 bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-900 p-4 z-50"
+      x-transition
+    >
+      <!-- Year Navigation -->
+      <div class="flex items-center justify-between mb-4">
+        <button 
+          @click="changeYear(-1)"
+          class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded dark:text-gray-300"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+          </svg>
+        </button>
+        <span x-text="currentYear" class="font-semibold dark:text-gray-200"></span>
+        <button 
+          @click="changeYear(1)"
+          class="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded dark:text-gray-300"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
+
+      <!-- Months Grid -->
+      <div class="grid grid-cols-3 gap-2">
+        <template x-for="(month, index) in months" :key="index">
+          <button 
+            @click="selectMonth(index)"
+            class="p-2 rounded text-sm dark:text-gray-300"
+            :class="{
+              'bg-primary/10 dark:bg-gray-700 font-semibold': currentMonth === index,
+              'hover:bg-gray-100 dark:hover:bg-gray-700': currentMonth !== index
+            }"
+            x-text="month"
+          ></button>
+        </template>
+      </div>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-1">
+    <button
+      @click="navigate(-1)"
+      class="p-1.5 hover:bg-primary/10 dark:hover:bg-gray-700 rounded dark:text-gray-300"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    <button
+      @click="goToToday"
+      class="px-2 py-1 text-sm hover:bg-primary/10 dark:hover:bg-gray-700 rounded dark:text-gray-300"
+    >
+      Today
+    </button>
+    <button
+      @click="navigate(1)"
+      class="p-1.5 hover:bg-primary/10 dark:hover:bg-gray-700 rounded dark:text-gray-300"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+    <button
+      @click="resetCalendar"
+      class="flex items-center gap-1 px-2 py-1 text-sm hover:bg-primary/10 dark:hover:bg-gray-700 rounded dark:text-gray-300"
+    >
+      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+      </svg>
+      Reset
+    </button>
+  </div>
+</div>
+
+<script>
+document.addEventListener('alpine:init', () => {
+  Alpine.data('monthNavigator', (initialDate) => ({
+    currentDate: new Date(initialDate),
+    isOpen: false,
+    months: [
+      'January', 'February', 'March', 'April',
+      'May', 'June', 'July', 'August',
+      'September', 'October', 'November', 'December'
+    ],
+
+    get currentMonth() {
+      return this.currentDate.getMonth();
+    },
+
+    get currentYear() {
+      return this.currentDate.getFullYear();
+    },
+
+    formatDate(date) {
+      return this.months[date.getMonth()] + ' ' + date.getFullYear();
+    },
+
+    async navigate(step) {
+      const newDate = new Date(this.currentDate);
+      newDate.setMonth(newDate.getMonth() + step);
+      await this.updateCalendar(newDate);
+    },
+
+    async goToToday() {
+      await this.updateCalendar(new Date());
+    },
+
+    async changeYear(step) {
+      const newDate = new Date(this.currentDate);
+      newDate.setFullYear(newDate.getFullYear() + step);
+      await this.updateCalendar(newDate);
+    },
+
+    async selectMonth(monthIndex) {
+      const newDate = new Date(this.currentDate);
+      newDate.setMonth(monthIndex);
+      await this.updateCalendar(newDate);
+      this.isOpen = false;
+    },
+
+    async updateCalendar(newDate) {
+      const dateStr = newDate.toISOString().slice(0, 7); 
+      
+      try {
+        const response = await fetch(`/schedule/change-month?current_date=${dateStr}`, {
+          headers: {
+            'HX-Request': 'true'
+          }
+        });
+
+        if (!response.ok) throw new Error('Failed to update calendar');
+
+        const html = await response.text();
+        document.getElementById('calendar-content').innerHTML = html;
+        this.currentDate = newDate;
+        
+        // Reinitialize drag and drop
+        if (window.initializeDragAndDrop) {
+          window.initializeDragAndDrop();
+        }
+      } catch (error) {
+        console.error('Error updating calendar:', error);
+      }
+    },
+
+    async resetCalendar() {
+      try {
+        const response = await fetch('/reset_calendar/', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+          }
+        });
+
+        if (!response.ok) throw new Error('Failed to reset calendar');
+
+        const data = await response.json();
+        
+        // Update both calendar and pending packages
+        document.getElementById('calendar-content').innerHTML = data.calendar_html;
+        document.getElementById('pending-packages').innerHTML = data.pending_html;
+        
+        this.currentDate = new Date();
+        
+        if (window.initializeDragAndDrop) {
+          window.initializeDragAndDrop();
+        }
+      } catch (error) {
+        console.error('Error resetting calendar:', error);
+      }
+    }
+  }));
+});
+</script>

@@ -1,0 +1,30 @@
+<div class="grid gap-4">
+  {% for rate in rates %}
+  <div class="bg-white shadow rounded-lg p-4">
+    <div class="flex justify-between items-center">
+      <div>
+        <h3 class="font-semibold">{{ rate.courier_name }}</h3>
+        <p class="text-sm text-gray-600">{{ rate.service_name }}</p>
+      </div>
+      <div class="text-right">
+        <p class="font-bold">{{ rate.total_charge }} {{ rate.currency }}</p>
+        {% if rate.delivery_time_min and rate.delivery_time_max %}
+        <p class="text-sm text-gray-500">
+          {{ rate.delivery_time_min }}-{{ rate.delivery_time_max }} days
+        </p>
+        {% endif %}
+      </div>
+    </div>
+    <button
+      class="mt-2 w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      hx-post="{% url 'main:create_booking' %}"
+      hx-include="closest div"
+      hx-target="#booking-form"
+    >
+      Select
+    </button>
+  </div>
+  {% empty %}
+  <div class="text-center py-4 text-gray-500">No rates available</div>
+  {% endfor %}
+</div>

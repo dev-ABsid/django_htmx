@@ -1,0 +1,88 @@
+<div class="bg-white shadow rounded-lg p-6">
+  <div class="flex justify-between items-start mb-6">
+    <div>
+      <h1 class="text-2xl font-bold">Booking {{ booking.easyship_id }}</h1>
+      <p class="text-gray-600">
+        Created: {{ booking.created_at|date:"M d, Y H:i" }}
+      </p>
+    </div>
+    <div
+      class="px-4 py-2 rounded-full {% if booking.status == 'PENDING' %}bg-yellow-100 text-yellow-800{% elif booking.status == 'COMPLETED' %}bg-green-100 text-green-800{% else %}bg-gray-100 text-gray-800{% endif %}"
+    >
+      {{ booking.status }}
+    </div>
+  </div>
+
+  <div class="grid grid-cols-2 gap-6">
+    <!-- Origin Address -->
+    <div class="border rounded-lg p-4">
+      <h3 class="font-semibold mb-2">Origin Address</h3>
+      <p>{{ booking.origin_company_name }}</p>
+      <p>{{ booking.origin_contact_name }}</p>
+      <p>{{ booking.origin_line_1 }}</p>
+      {% if booking.origin_line_2 %}
+      <p>{{ booking.origin_line_2 }}</p>
+      {% endif %}
+      <p>{{ booking.origin_city }}, {{ booking.origin_state }}</p>
+      <p>{{ booking.origin_postal_code }}</p>
+      <p>{{ booking.origin_country_alpha2 }}</p>
+    </div>
+
+    <!-- Destination Address -->
+    <div class="border rounded-lg p-4">
+      <h3 class="font-semibold mb-2">Destination Address</h3>
+      <p>{{ booking.destination_company_name }}</p>
+      <p>{{ booking.destination_contact_name }}</p>
+      <p>{{ booking.destination_line_1 }}</p>
+      {% if booking.destination_line_2 %}
+      <p>{{ booking.destination_line_2 }}</p>
+      {% endif %}
+      <p>{{ booking.destination_city }}, {{ booking.destination_state }}</p>
+      <p>{{ booking.destination_postal_code }}</p>
+      <p>{{ booking.destination_country_alpha2 }}</p>
+    </div>
+  </div>
+
+  <!-- Shipment Details -->
+  <div class="mt-6">
+    <h3 class="font-semibold mb-2">Shipment Details</h3>
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <p><strong>Courier:</strong> {{ booking.courier_name }}</p>
+        <p><strong>Service:</strong> {{ booking.selected_courier_service }}</p>
+        <p><strong>Tracking Number:</strong> {{ booking.tracking_number }}</p>
+      </div>
+      <div>
+        <p>
+          <strong>Insurance:</strong> {% if booking.is_insured %}Yes{% else
+          %}No{% endif %}
+        </p>
+        <p>
+          <strong>Platform:</strong> {{ booking.platform_name|default:"N/A" }}
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Actions -->
+  <div class="mt-6 flex gap-4">
+    {% if booking.label_url %}
+    <a
+      href="{{ booking.label_url }}"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+      target="_blank"
+    >
+      Download Label
+    </a>
+    {% endif %} {% if booking.status != 'VOIDED' %}
+    <button
+      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+      hx-post="{% url 'main:void_label' booking.easyship_id %}"
+      hx-confirm="Are you sure you want to void this label?"
+      hx-target="#booking-detail"
+    >
+      Void Label
+    </button>
+    {% endif %}
+  </div>
+</div>

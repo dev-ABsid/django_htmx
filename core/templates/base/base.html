@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html class="{% if request.session.dark_theme %}dark{% endif %}">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Django HTMX Project{% endblock title %}</title>
+    <meta name="csrf-token" content="{{ csrf_token }}">
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              dark: {
+                100: "#1E293B",
+                200: "#334155",
+                300: "#475569",
+              },
+            },
+          },
+        },
+      };
+    </script>
+
+    {# HTMX #}
+    <script src="https://unpkg.com/htmx.org@1.9.10"></script>
+    <script defer src="https://unpkg.com/@alpinejs/persist@3.x.x/dist/cdn.min.js"></script>
+    <script defer src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    {% load static %} {% load compress %} {% compress css %}
+    <link rel="stylesheet" href="{% static 'css/main.css' %}" />
+    {% endcompress %}
+  </head>
+  <body class="h-full bg-gray-50 dark:bg-dark-100 dark:text-gray-100">
+    {% include 'partials/nav.html' %}
+
+    <main class="container mx-auto px-4 py-8">
+      {% block content %}{% endblock content %}
+    </main>
+
+    {% block extra_js %}
+    <script>
+      if (window.matchMedia("(prefers-color-scheme: dark)").matches) {
+        document.documentElement.classList.add("dark");
+      }
+
+      document.body.addEventListener("htmx:configRequest", (event) => {
+        const csrfToken = document.cookie
+          .split("; ")
+          .find((row) => row.startsWith("csrftoken="))
+          ?.split("=")[1];
+        if (csrfToken) {
+          event.detail.headers["X-CSRFToken"] = csrfToken;
+        }
+      });
+    </script>
+    {% endblock %}
+  </body>
+</html>

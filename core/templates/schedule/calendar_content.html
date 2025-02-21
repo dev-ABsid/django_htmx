@@ -1,0 +1,69 @@
+{% load static %}
+<div class="space-y-4" data-current-date="{{ current_date|date:'Y-m' }}">
+  {% csrf_token %}
+  {% for week in weeks %}
+    <div
+      class="week-dropzone rounded-xl border-2 border-dashed p-4 transition-all duration-300 hover:border-primary/50 group
+             dark:border-gray-700 dark:hover:border-gray-500 dark:bg-gray-800"
+      data-week-id="{{ week.id }}"
+    >
+      <div class="flex items-center justify-between mb-3">
+        <div class="flex items-center gap-2">
+          <div class="p-1.5 rounded-lg bg-primary/10 group-hover:bg-primary/20 
+                      dark:bg-gray-700 dark:group-hover:bg-gray-600">
+            <svg
+              class="w-4 h-4 text-gray-600 dark:text-gray-300"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"
+              />
+            </svg>
+          </div>
+          <span class="text-xs text-gray-600 bg-primary/10 px-2 py-1 rounded-md
+                     dark:text-gray-300 dark:bg-gray-700">
+            {{ week.start|date:"M d" }} - {{ week.end|date:"M d" }}
+          </span>
+        </div>
+      </div>
+
+      <div class="space-y-2">
+        {% for booking in bookings %}
+          {% if booking.scheduled_date == week.id %}
+            <div class="flex items-center justify-between p-2 bg-white rounded-lg shadow
+                        dark:bg-gray-700 dark:shadow-gray-900">
+              <div class="flex items-center gap-2">
+                <span class="text-sm font-medium dark:text-white">
+                  {{ booking.tracking_number }}
+                </span>
+                <span class="text-xs text-gray-500 dark:text-gray-400">
+                  {{ booking.destination }}
+                </span>
+              </div>
+            </div>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  {% endfor %}
+</div>
+
+
+<script>
+  
+  document.getElementById('month-display').textContent = '{{ current_date|date:"F Y" }}';
+
+  const navButtons = document.querySelectorAll('#calendar-nav button');
+  navButtons.forEach(button => {
+    const currentVals = JSON.parse(button.getAttribute('hx-vals'));
+    const oldDate = currentVals.current_date;
+    currentVals.current_date = '{{ current_date|date:"Y-m" }}';
+    button.setAttribute('hx-vals', JSON.stringify(currentVals));
+    console.log(`Updated button date from ${oldDate} to ${currentVals.current_date}`);
+  });
+</script>

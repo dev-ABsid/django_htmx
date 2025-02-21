@@ -1,0 +1,112 @@
+# Python
+*.py[cod]
+__pycache__/
+*.so
+.Python
+*.pyc
+.coverage
+htmlcov/
+
+# Python Virtual Environment
+venv/
+env/
+.env/
+.venv/
+ENV/
+virtualenv/
+myenv/
+
+# Django
+*.log
+local_settings.py
+db.sqlite3
+db.sqlite3-journal
+media/
+static/
+*.pot
+*.mo
+
+# Django migration files (uncomment if you want to ignore migrations)
+# */migrations/*.py
+# !*/migrations/__init__.py
+
+# Distribution / packaging
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Unit test / coverage reports
+.tox/
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+.hypothesis/
+.pytest_cache/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+*.ipynb
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+.vim
+*.sublime-workspace
+*.sublime-project
+.project
+.settings/
+.classpath
+.factorypath
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+Desktop.ini
+
+# Environment variables
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Node (if using JavaScript/Node.js in your Django project)
+node_modules/
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+
+# Logs and databases
+*.log
+*.sql
+*.sqlite
+
+# Other
+*.bak
+*.tmp
+*.temp
+.sass-cache/
+*.pid
+*.seed
+.directory

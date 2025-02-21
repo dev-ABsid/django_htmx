@@ -1,0 +1,82 @@
+{% extends "base.html" %} {% block content%}
+<div class="max-w-4xl mx-auto">
+  {% include 'partials/tracking_detail.html' %}
+</div>
+{% endblock %} {# templates/partials/tracking_detail.html #}
+<div class="bg-white shadow rounded-lg p-6 dark:bg-dark-200">
+  <div class="flex justify-between items-start mb-6">
+    <div>
+      <h1 class="text-2xl font-bold">Tracking: {{ booking.easyship_id }}</h1>
+      <p class="text-gray-600 dark:text-gray-400">
+        Last Updated: {{ tracking.updated_at|date:"M d, Y H:i" }}
+      </p>
+    </div>
+    <div
+      class="px-4 py-2 rounded-full {% if tracking.status == 'in_transit' %}bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200{% elif tracking.status == 'delivered' %}bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-200{% else %}bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-200{% endif %}"
+    >
+      {{ tracking.status|title }}
+    </div>
+  </div>
+
+  <!-- Timeline -->
+  <div class="mt-8">
+    <h2 class="text-lg font-semibold mb-4">Tracking History</h2>
+    <div class="space-y-4">
+      {% for event in tracking.events %}
+      <div class="flex items-start">
+        <div class="flex items-center h-full">
+          <div class="w-2 h-2 bg-blue-500 rounded-full"></div>
+          <div class="w-0.5 h-full bg-blue-200 dark:bg-blue-700"></div>
+        </div>
+        <div class="ml-4">
+          <p class="font-semibold">{{ event.status_text }}</p>
+          <p class="text-sm text-gray-600 dark:text-gray-400">
+            {{ event.location }}
+          </p>
+          <p class="text-sm text-gray-500 dark:text-gray-400">
+            {{ event.timestamp|date:"M d, Y H:i" }}
+          </p>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <!-- Shipment Details -->
+  <div class="mt-8 grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="border rounded-lg p-4 dark:border-dark-300">
+      <h3 class="font-semibold mb-2">Shipping Details</h3>
+      <p><strong>Courier:</strong> {{ booking.courier_name }}</p>
+      <p><strong>Service:</strong> {{ booking.selected_courier_service }}</p>
+      <p><strong>Tracking Number:</strong> {{ booking.tracking_number }}</p>
+    </div>
+
+    <div class="border rounded-lg p-4 dark:border-dark-300">
+      <h3 class="font-semibold mb-2">Delivery Information</h3>
+      <p>
+        <strong>Estimated Delivery:</strong> {{
+        tracking.estimated_delivery|default:"Not available" }}
+      </p>
+      <p>
+        <strong>Origin:</strong> {{ booking.origin_city }}, {{
+        booking.origin_country_alpha2 }}
+      </p>
+      <p>
+        <strong>Destination:</strong> {{ booking.destination_city }}, {{
+        booking.destination_country_alpha2 }}
+      </p>
+    </div>
+  </div>
+
+  <!-- Refresh Button -->
+  <div class="mt-6">
+    <button
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded dark:bg-blue-600 dark:hover:bg-blue-800"
+      hx-get="{% url 'main:track_shipment' booking.easyship_id %}"
+      hx-target="closest div"
+      hx-swap="outerHTML"
+    >
+      Refresh Tracking
+    </button>
+  </div>
+</div>

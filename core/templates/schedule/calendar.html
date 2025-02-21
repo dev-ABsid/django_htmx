@@ -1,0 +1,131 @@
+{% extends 'base/base.html' %}
+
+{% block content %}
+{% csrf_token %} 
+<div class="p-1">
+  <div class="flex gap-6">
+    <!-- Calendar Section -->
+    <div class="flex-1">
+      <div class="bg-white rounded-lg shadow dark:bg-dark-200 dark:border dark:border-gray-700">
+        <div class="p-6 pb-6 border-b dark:border-gray-700">
+          <div class="flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="p-2 bg-blue-100 dark:bg-blue-900 rounded-xl">
+                <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                </svg>
+              </div>
+              <div>
+                <span class="text-xl font-semibold dark:text-white">Delivery Schedule</span>
+                <p class="text-sm text-gray-500 dark:text-gray-400 font-normal mt-1">
+                  Drag and drop packages to schedule deliveries
+                </p>
+              </div>
+            </div>
+            {% include 'schedule/month_navigator.html' %}
+          </div>
+        </div>
+        <div class="p-6" id="calendar-content">
+          {% include 'schedule/calendar_content.html' %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Packages List -->
+    <div class="w-80 bg-white rounded-lg shadow dark:bg-dark-200 dark:border dark:border-gray-700">
+      <div class="p-6 border-b dark:border-gray-700">
+        <div class="flex items-center gap-2">
+          <svg class="w-5 h-5 dark:text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" />
+          </svg>
+          <span class="font-semibold dark:text-white">Pending Packages</span>
+        </div>
+      </div>
+      <div class="p-6">
+        <div id="pending-packages" class="h-[calc(100vh-240px)] overflow-y-auto pr-4">
+          {% include 'schedule/pending_packages.html' %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% block extra_js %}
+<script>
+    function initializeDragAndDrop() {
+  
+      document.querySelectorAll('[draggable="true"]').forEach(draggable => {
+        draggable.addEventListener('dragstart', function (e) {
+          e.dataTransfer.setData('text/plain', this.dataset.bookingId);
+          this.classList.add('opacity-50');
+        });
+  
+        draggable.addEventListener('dragend', function () {
+          this.classList.remove('opacity-50');
+        });
+      });
+  
+      document.querySelectorAll('.week-dropzone').forEach(dropZone => {
+        dropZone.addEventListener('dragenter', function (e) {
+          e.preventDefault();
+          this.classList.add('bg-blue-50', 'border-blue-300');
+        });
+  
+        dropZone.addEventListener('dragover', function (e) {
+          e.preventDefault();
+          this.classList.add('bg-blue-50', 'border-blue-300');
+        });
+  
+        dropZone.addEventListener('dragleave', function (e) {
+          this.classList.remove('bg-blue-50', 'border-blue-300');
+        });
+  
+        dropZone.addEventListener('drop', async function (e) {
+          e.preventDefault();
+          this.classList.remove('bg-blue-50', 'border-blue-300');
+  
+          const bookingId = e.dataTransfer.getData('text/plain');
+          const weekId = this.dataset.weekId;
+  
+          if (!bookingId || !weekId) {
+            console.error('Missing required data:', { bookingId, weekId });
+            return;
+          }
+  
+          try {
+            const response = await fetch(`/schedule/update/${bookingId}/`, {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+                'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+              },
+              body: `week_id=${weekId}`
+            });
+  
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+  
+            const data = await response.json();
+            
+            document.getElementById('calendar-content').innerHTML = data.calendar_html;
+            document.getElementById('pending-packages').innerHTML = data.pending_html;
+  
+            initializeDragAndDrop();
+  
+          } catch (error) {
+            console.error('Error updating schedule:', error);
+          }
+        });
+      });
+    }
+  
+    document.addEventListener('DOMContentLoaded', initializeDragAndDrop);
+  
+    document.body.addEventListener('htmx:afterSwap', function () {
+      console.log("HTMX content updated. Re-initializing drag-and-drop...");
+      initializeDragAndDrop();
+    });
+</script>
+{% endblock %}
+{% endblock %}

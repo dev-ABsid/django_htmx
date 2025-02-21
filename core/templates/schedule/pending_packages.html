@@ -1,0 +1,5 @@
+{% for booking in bookings %}
+    {% if booking.status == 'pending' %}
+        {% include 'schedule/booking_card.html' with booking=booking draggable=True %}
+    {% endif %}
+{% endfor %}

@@ -1,0 +1,26 @@
+<div class="mt-2 p-2 mb-2 rounded-xl border-2 transition-all duration-300 transform 
+    {% if draggable %} bg-primary/10 hover:shadow-lg hover:-translate-y-1 hover:border-blue-400 cursor-grab {% else %} border-green-400 bg-green-50 {% endif %}"
+    {% if draggable %} draggable="true" data-booking-id="{{ booking.id }}" {% endif %}>
+  
+  <div class="flex items-start justify-between gap-2">
+    <div class="flex items-center gap-3">
+      <div class="p-2 rounded-lg {% if draggable %} bg-blue-50 {% else %} bg-green-100 {% endif %}">
+        <svg class="w-5 h-5 {% if draggable %} text-blue-600 {% else %} text-green-600 {% endif %}" 
+             fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+        </svg>
+      </div>
+      <div>
+        <p class="font-semibold text-sm">{{ booking.tracking_number }}</p>
+        <p class="text-xs text-gray-600">{{ booking.destination }}</p>
+      </div>
+    </div>
+
+    {% if not draggable %}  {# Only show remove button for scheduled bookings #}
+      <button class="text-red-500 text-xs px-2 py-1 rounded-md bg-red-100 hover:bg-red-200"
+              onclick="removeBooking('{{ booking.id }}')">
+        Remove
+      </button>
+    {% endif %}
+  </div>
+</div>
