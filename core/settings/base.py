@@ -13,7 +13,7 @@ EASYSHIP_API_KEY = os.environ.get('EASYSHIP_API_KEY')
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["django-htmx-h7x1.onrender.com"]
 
 INSTALLED_APPS = [
     'django.contrib.admin',
